@@ -1,14 +1,17 @@
 import {
     Link as ChakraLink,
     Box, Flex, Button, Icon, Table, Thead, Spinner, HStack, Progress, Stack,
-    Tr, Th, Td, Checkbox, Tbody, Text, useBreakpointValue, IconButton
+    Tr, Th, Td, Checkbox, Tbody, Text, useBreakpointValue, IconButton, useDisclosure
 } from "@chakra-ui/react";
-import { RiPencilLine } from "react-icons/ri";
+import { RiArrowUpLine, RiPencilLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai"
 
 
 import { PageContainer } from "../components/PageContainer";
 import { useState } from "react";
+import { ModalAddBill } from "../components/Modal/AddBill";
+import { ModalEditBill } from "../components/Modal/EditBill";
+import { Pagination } from "../components/Pagination";
 
 
 type Bill = {
@@ -25,8 +28,16 @@ interface BillsResponseData {
 
 export default function Bills() {
 
-    const [allChecked, setAllChecked] = useState(false);
-
+    const {
+        isOpen: isEditModalOpen,
+        onOpen: onEditModalOpen,
+        onClose: onEditModalClose,
+    } = useDisclosure();
+    const {
+        isOpen: isAddModalOpen,
+        onOpen: onAddModalOpen,
+        onClose: onAddModalClose,
+    } = useDisclosure();
 
 
     const data: Bill[] = [
@@ -68,7 +79,7 @@ export default function Bills() {
                 <Button
                     leftIcon={<Icon as={AiOutlinePlus} />}
                     colorScheme="blackAlpha"
-                    onClick={() => { }}
+                    onClick={() => onAddModalOpen()}
                 >
                     Cadastrar
                 </Button>
@@ -82,7 +93,9 @@ export default function Bills() {
                         <Th px={["4", "4", "6"]} color="gray.300" width="8">
                             <Checkbox colorScheme="yellow" />
                         </Th>
-                        <Th>Nome</Th>
+                        <Th>
+                            Nome
+                        </Th>
                         <Th>Valor</Th>
                         <Th>Data</Th>
                         <Th>Categoria</Th>
@@ -114,8 +127,7 @@ export default function Bills() {
                                     fontSize="24"
                                     variant="unstyled"
                                     _hover={{ color: "yellow.500" }}
-                                    onClick={() => { }}
-
+                                    onClick={() => onEditModalOpen()}
                                     mr="2"
                                 />
                             </Td>
@@ -124,6 +136,14 @@ export default function Bills() {
 
                 </Tbody>
             </Table>
+            <Pagination
+                totalCountOfRegisters={30}
+                currentPage={1}
+                registersPerPage={10}
+                onPageChange={() => { }} 
+            />
+            <ModalAddBill isOpen={isAddModalOpen} onClose={onAddModalClose} />
+            <ModalEditBill isOpen={isEditModalOpen} onClose={onEditModalClose} />
         </PageContainer >
     );
 }

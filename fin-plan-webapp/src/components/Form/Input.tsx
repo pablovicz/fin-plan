@@ -18,19 +18,21 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
             {
                 !!label && (<FormLabel htmlFor={name} color="theme.silk">{label}</FormLabel>)  //só mostra caso o label exista}  
             }
+
             < ChakraInput
                 name={name}
                 id={name}
                 focusBorderColor="theme.paleGold"
-                bgColor="gray.900"
-                variant="filled"
-                _hover={{
-                    bgColor: 'gray.900'
-                }}
-                size="lg"
+                variant="flushed"
+                bgColor="theme.paper"
+                borderColor="theme.silk"
+                color="theme.paleGold"
+                _hover={{ bgColor: "theme.paper", borderColor: "theme.silk" }}
+                size="md"
                 ref={ref}
                 {...rest}
             />
+
             {!!error && (
                 <FormErrorMessage>{error.message}</FormErrorMessage>
             )}

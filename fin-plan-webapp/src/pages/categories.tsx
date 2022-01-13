@@ -1,13 +1,17 @@
 import {
     Link as ChakraLink,
     Box, Flex, Button, Icon, Table, Thead, Spinner, HStack, Progress, Stack,
-    Tr, Th, Td, Checkbox, Tbody, Text, useBreakpointValue, IconButton
+    Tr, Th, Td, Checkbox, Tbody, Text, useBreakpointValue, IconButton, useDisclosure
 } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai"
 
 
 import { PageContainer } from "../components/PageContainer";
+import { ModalAddCategory } from "../components/Modal/AddCategory";
+import { ModalEditCategory } from "../components/Modal/EditCategory";
+import { Pagination } from "../components/Pagination";
+import { useState } from "react";
 
 type CategoryResponseData = {
     label: string;
@@ -17,27 +21,46 @@ type CategoryResponseData = {
 
 
 
-export default function Categories() {
+export default function categorys() {
+
+    const {
+        isOpen: isEditModalOpen,
+        onOpen: onEditModalOpen,
+        onClose: onEditModalClose,
+    } = useDisclosure();
+    const {
+        isOpen: isAddModalOpen,
+        onOpen: onAddModalOpen,
+        onClose: onAddModalClose,
+    } = useDisclosure();
 
 
     const categoryData: CategoryResponseData[] = [
         {
             label: "Apartamento",
-            color: "red",
+            color: "#F00000",
             id: 1
         },
         {
             label: "Mãe",
-            color: "blue",
+            color: "#00ee47",
             id: 2
         },
         {
             label: "Kaoana",
-            color: "green",
+            color: "#2034e4",
             id: 3
         },
     ]
 
+
+    const [categoryEdit, setCategoryEdit] = useState({} as CategoryResponseData);
+
+
+    function handleEditModalOpen(category: CategoryResponseData){
+        setCategoryEdit(category);
+        onEditModalOpen();
+    }
 
 
     return (
@@ -51,7 +74,7 @@ export default function Categories() {
                 <Button
                     leftIcon={<Icon as={AiOutlinePlus} />}
                     colorScheme="blackAlpha"
-                    onClick={() => { }}
+                    onClick={() => onAddModalOpen()}
                 >
                     Cadastrar
                 </Button>
@@ -71,20 +94,20 @@ export default function Categories() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {categoryData.map(categorie => (
-                        <Tr key={categorie.id}>
+                    {categoryData.map(category => (
+                        <Tr key={category.id}>
                             <Td>
                                 <Checkbox colorScheme="yellow" />
                             </Td>
                             <Td>
-                                {categorie.label}
+                                {category.label}
                             </Td>
                             <Td>
                                 <Box
                                     w={10}
                                     h={5}
                                     borderRadius={5}
-                                    bgColor={categorie.color}
+                                    bgColor={category.color}
                                 >
                                 </Box>
                             </Td>
@@ -95,7 +118,7 @@ export default function Categories() {
                                     fontSize="24"
                                     variant="unstyled"
                                     _hover={{ color: "yellow.500" }}
-                                    onClick={() => { }}
+                                    onClick={() => handleEditModalOpen(category)}
                                     mr="2"
                                 />
                             </Td>
@@ -105,6 +128,15 @@ export default function Categories() {
 
                 </Tbody>
             </Table>
+            <Pagination
+                totalCountOfRegisters={30}
+                currentPage={1}
+                registersPerPage={10}
+                onPageChange={() => { }}
+            />
+
+            <ModalAddCategory isOpen={isAddModalOpen} onClose={onAddModalClose} />
+            <ModalEditCategory isOpen={isEditModalOpen} onClose={onEditModalClose} category={categoryEdit}/>
         </PageContainer>
     );
 }
