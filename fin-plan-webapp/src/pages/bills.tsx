@@ -12,14 +12,11 @@ import { useState } from "react";
 import { ModalAddBill } from "../components/Modal/AddBill";
 import { ModalEditBill } from "../components/Modal/EditBill";
 import { Pagination } from "../components/Pagination";
+import { Bill } from "../types/types";
+import { dateToTable } from "../utils/dateUtils";
 
 
-type Bill = {
-    name: string;
-    value: number;
-    createdDate: string;
-    category: string;
-}
+
 
 interface BillsResponseData {
     bills: Bill[];
@@ -27,6 +24,8 @@ interface BillsResponseData {
 
 
 export default function Bills() {
+
+    const [editBillData, setEditBillData] = useState({} as Bill);
 
     const {
         isOpen: isEditModalOpen,
@@ -42,30 +41,56 @@ export default function Bills() {
 
     const data: Bill[] = [
         {
+            id: 1,
             name: 'Aluguel',
             value: 1735.50,
-            createdDate: 'jan/22',
-            category: 'Apartamento'
+            date: new Date(),
+            category: {
+                label: "Apartamento",
+                color: "#F00000",
+                id: 1
+            }
         },
         {
+            id: 2,
             name: 'Condomínio',
             value: 620.50,
-            createdDate: 'jan/22',
-            category: 'Apartamento'
+            date: new Date(),
+            category: {
+                label: "Apartamento",
+                color: "#F00000",
+                id: 1
+            }
         },
         {
+            id: 3,
             name: 'Carro',
             value: 860.00,
-            createdDate: 'jan/22',
-            category: 'Mae'
+            date: new Date(),
+            category: {
+                label: "Mãe",
+                color: "#00ee47",
+                id: 2
+            }
         },
         {
+            id: 4,
             name: 'Internet',
             value: 104.00,
-            createdDate: 'jan/22',
-            category: 'Apartamento'
+            date: new Date(),
+            category: {
+                label: "Apartamento",
+                color: "#F00000",
+                id: 1
+            }
         }
     ]
+
+    function handleEditModalOpen(bill: Bill) {
+        setEditBillData(bill);
+        onEditModalOpen();
+    }
+
 
 
     return (
@@ -112,13 +137,16 @@ export default function Bills() {
                                 {bill.name}
                             </Td>
                             <Td>
-                                {bill.value}
+                                {new Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                }).format(bill.value)}
                             </Td>
                             <Td>
-                                {bill.createdDate}
+                                {dateToTable(bill.date)}
                             </Td>
                             <Td>
-                                {bill.category}
+                                {bill.category.label}
                             </Td>
                             <Td>
                                 <IconButton
@@ -126,8 +154,8 @@ export default function Bills() {
                                     icon={<Icon as={RiPencilLine} />}
                                     fontSize="24"
                                     variant="unstyled"
-                                    _hover={{ color: "yellow.500" }}
-                                    onClick={() => onEditModalOpen()}
+                                    _hover={{ color: "theme.primary" }}
+                                    onClick={() => handleEditModalOpen(bill)}
                                     mr="2"
                                 />
                             </Td>
@@ -140,10 +168,10 @@ export default function Bills() {
                 totalCountOfRegisters={30}
                 currentPage={1}
                 registersPerPage={10}
-                onPageChange={() => { }} 
+                onPageChange={() => { }}
             />
             <ModalAddBill isOpen={isAddModalOpen} onClose={onAddModalClose} />
-            <ModalEditBill isOpen={isEditModalOpen} onClose={onEditModalClose} />
+            <ModalEditBill isOpen={isEditModalOpen} onClose={onEditModalClose} oldData={editBillData} />
         </PageContainer >
     );
 }

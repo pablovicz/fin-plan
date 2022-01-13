@@ -5,7 +5,7 @@ import {
     Select,
     SelectProps
 } from '@chakra-ui/react';
-import { getAllMonths } from '../../utils/dateUtils';
+import { getAllMonths } from '../../../utils/dateUtils';
 
 interface SelectInputProps extends SelectProps {
     name: string;
@@ -22,7 +22,7 @@ const SelectInputBase: ForwardRefRenderFunction<HTMLInputElement, SelectInputPro
     return (
         <FormControl isInvalid={!!error}>
             {
-                !!label && (<FormLabel htmlFor={name} color="theme.silk">{label}</FormLabel>)
+                !!label && (<FormLabel htmlFor={name} color="theme.paleGold">{label}</FormLabel>)
             }
 
 

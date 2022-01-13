@@ -3,16 +3,17 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Category } from '../../types/types';
-import { Input } from './Input';
-import { NumberInput } from './NumberInput';
-import { getAllMonths } from '../../utils/dateUtils';
-import { SelectInput } from './SelectInput';
+import { Input } from './Inputs/Input';
+import { NumberInput } from './Inputs/NumberInput';
+import { SelectInput } from './Inputs/SelectInput';
+import { useState } from 'react';
+import { getAllMonths, getMonthNumber } from '../../utils/dateUtils';
 
 type CreateBillFormData = {
     name: string;
     value: number;
-    date: string;
-    category: Category[];
+    month: string;
+    category: string;
 }
 
 
@@ -25,18 +26,29 @@ interface FormAddBillProps {
 const createBillFormSchema = yup.object().shape({
     name: yup.string().required('Nome é obrigatório').max(120, 'O nome deve ter menos do que 120 caracteres').min(3, 'O nome deve possuir no minimo 3 caracteres'),
     value: yup.number(),
-    date: yup.string(),
+    year: yup.number().max(new Date().getFullYear(), "O ano não pode ser maior do que o atual"),
+    month: yup.string(),
+    category: yup.string()
 })
 
 
 
 export function FormAddBill({ closeModal }: FormAddBillProps) {
 
-    const toast = useToast();
-
     const categoriesData = [
         "categoria 1", "categoria 2", "categoria 3", "categoria 4", "categoria 5", "categoria 6",
     ]
+
+
+    //const [billValue, setBillValue] = useState(0);
+    const [month, setMonth] = useState('janeiro');
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [category, setCategory] = useState(categoriesData[0]);
+
+
+    const toast = useToast();
+
+
 
     const { register, handleSubmit, formState } = useForm({
         resolver: yupResolver(createBillFormSchema)
@@ -46,7 +58,13 @@ export function FormAddBill({ closeModal }: FormAddBillProps) {
     const handleUserCreate: SubmitHandler<CreateBillFormData> = async (values, event) => {
         event.preventDefault();
         //await createUser.mutateAsync(values);
-        console.log(values);
+        const data = {
+            name: values.name,
+            date: new Date(year, getMonthNumber(month), 1),
+            value: values.value,
+            category: category
+        }
+        console.log(data)
         closeModal();
         toast({
             status: 'success',
@@ -54,8 +72,6 @@ export function FormAddBill({ closeModal }: FormAddBillProps) {
             description: 'Conta foi cadastrada com sucesso.'
         })
     }
-
-
 
     return (
         <Box
@@ -73,44 +89,45 @@ export function FormAddBill({ closeModal }: FormAddBillProps) {
                         label="Nome da Conta"
                         w="80"
                         variant="flushed"
-                        bgColor="theme.paper"
-                        borderColor="theme.silk"
-                        color="theme.paleGold"
-                        _hover={{ bgColor: "theme.paper", borderColor: "theme.silk" }}
                         error={formState.errors.name}
                         {...register('name')}
                     />
-                    <NumberInput
-                        name="value"
+                    <Input
                         label="Valor"
-                        isRequired={true}
+                        type="number"
+                        w="25"
+                        variant="flushed"
                         defaultValue={0}
-                        precision={2}
-                        min={0}
                         error={formState.errors.value}
+                        {...register('value')}
                     />
-
                 </HStack>
                 <HStack spacing="8" w="100%">
                     <SelectInput
-                        label="Mês de Referência"
                         name="month"
+                        label="Mês de Referência"
                         type="month"
+                        variant="flushed"
                         isRequired={true}
+                        value={month}
+                        onChange={(e) => setMonth(e.target.value)}
                     />
-                    <NumberInput
-                        name="year"
-                        label="Ano de Referência"
-                        isRequired={true}
-                        max={new Date().getFullYear()}
+                    <Input
+                        label="Year"
+                        type="number"
+                        w="25"
                         defaultValue={new Date().getFullYear()}
-                        error={formState.errors.value}
+                        variant="flushed"
+                        error={formState.errors.year}
+                        {...register('year')}
                     />
                     <SelectInput
                         label="Categoria"
-                        name="category"
+                        //name="category"
                         isRequired={true}
-
+                        value={category}
+                        variant="flushed"
+                        onChange={setCategory}
                         options={categoriesData}
                     />
 

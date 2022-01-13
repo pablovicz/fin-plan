@@ -19,7 +19,7 @@ export function Profile({ showProfileData = true }: ProfileProps) {
               size="md"
               name="Pablo Woinarovicz"
               href="https://avatars.githubusercontent.com/u/68609973?v=4" 
-              bgColor="yellow.500"
+              bgColor="theme.primary"
             />
 
         </Flex>

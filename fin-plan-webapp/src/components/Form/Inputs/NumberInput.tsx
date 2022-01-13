@@ -21,7 +21,7 @@ const NumberInputBase: ForwardRefRenderFunction<HTMLInputElement, NumberInputPro
     return (
         <FormControl isInvalid={!!error}>
             {
-                !!label && (<FormLabel htmlFor={name} color="theme.silk">{label}</FormLabel>)
+                !!label && (<FormLabel htmlFor={name} color="theme.paleGold">{label}</FormLabel>)
             }
 
             <ChakraInputNumber

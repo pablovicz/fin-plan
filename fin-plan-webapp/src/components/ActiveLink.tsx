@@ -26,7 +26,7 @@ export function ActiveLink({children, ...rest }: ActiveLinkProps){
     return (
         <Link {...rest}>
             {cloneElement(children, {
-                color: isActive ? 'yellow.500' : 'theme.paleGold'
+                color: isActive ? 'theme.primary' : 'theme.paleGold'
             })}
         </Link>
     );

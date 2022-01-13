@@ -6,15 +6,17 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react';
+import { Bill } from '../../types/types';
 import { FormEditBill } from '../Form/FormEditBill';
 
 
 interface ModalEditBillProps {
+    oldData: Bill;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function ModalEditBill({ isOpen, onClose }: ModalEditBillProps): JSX.Element {
+export function ModalEditBill({ isOpen, onClose, oldData }: ModalEditBillProps): JSX.Element {
 
     const handleCloseModal = (): void => {
         onClose();
@@ -27,7 +29,7 @@ export function ModalEditBill({ isOpen, onClose }: ModalEditBillProps): JSX.Elem
                 <ModalHeader fontSize="2xl" color="theme.paleGold">Nova Categoria</ModalHeader>
                 <ModalCloseButton color="theme.paleGold" />
                 <ModalBody w="90%">
-                    <FormEditBill closeModal={handleCloseModal} />
+                    <FormEditBill closeModal={handleCloseModal} oldData={oldData}/>
                 </ModalBody>
             </ModalContent>
         </Modal>

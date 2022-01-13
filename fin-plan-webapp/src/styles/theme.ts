@@ -15,6 +15,7 @@ export const theme = extendTheme({
             "50": "#EEEEF2"
         },
         theme: {
+            "primary": "#D69E2E",
             "paleGold": "#C0B283",
             "silk": "#DCD0C0",
             "paper": "#F4F4F4",

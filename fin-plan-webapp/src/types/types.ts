@@ -12,6 +12,6 @@ export type Bill = {
     id: number; 
     name: string;
     value: number;
-    date: string;
-    category: Category[];
+    date: Date;
+    category: Category;
 }

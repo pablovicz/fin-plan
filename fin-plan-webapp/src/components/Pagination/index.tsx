@@ -68,7 +68,7 @@ export function Pagination({
                     <>
                         {currentPage + 1 + siblingsCount < lastPage && (
                             <Text
-                                color="gray.300"
+                                color="gray.600"
                                 width="8"
                                 textAlign="center"
                             >
